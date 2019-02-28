@@ -12,7 +12,7 @@ name = [[sg.Text('Enter server name, database, query: ')],
           [sg.Text('Database', size=(15, 1)), sg.InputCombo(['N/A','Insert Other Values Needed'])],      
           [sg.Text('SQL Query', size=(15, 1)), sg.InputText()],  
           [sg.Text('File Name', size=(15, 1)), sg.InputText()],
-          [sg.Text('Visualize Data', size=(15,1)), sg.Checkbox('Yes'), sg.Checkbox("No")], 
+          [sg.Text('Visualize Data', size=(15,1)), sg.InputCombo(['Yes', 'No'])], #set Yes as default
           [sg.Text('Data Type', size=(15,1)), sg.InputCombo(['N/A', 'Insert Other Values Needed'])],
           [sg.Text('Graph Title', size=(15, 1)), sg.InputText()],
           [sg.Text('X-Axis', size=(15, 1)), sg.InputText()],      
@@ -62,21 +62,27 @@ print("File has been created!")
 #---------------------------------------------------------------------------------------------------------
 data1 = pd.read_excel(r"C:\\Users\\insert path directory" + values[3] + ".xlsx")
 
-visualize1 = values[4] 
-#insert your own values here
-if values[4] == 'Yes': 
-    if  values[5] in ('Insert Date Type Name'):
-        fig, ax = plt.subplots(1,1) #line chart
-        data1.plot(x= values[7] , y= values[8], label = ' ', ax=ax)
-        ax.set(xlabel=" ", ylabel=" " )
-        plt.title(values[6])
+four = str(values[4]) #yes or no graphing
+five = values[5] #data type
+six = values[6] #title
+seven = values[7] #x value
+eight = values[8] #y value
+nine = values[9] 
+ten = values[10] 
+
+
+if four == 'Yes': 
+    if five == "Database": 
+        fig, ax = plt.subplots(1,1)
+        data1.plot(x = seven, y = eight, label = six, ax=ax)
+        ax.set(xlabel = nine, ylabel = ten) 
+        plt.title(six) 
         plt.show
-    elif values[5] in ("Insert Data Type"):
-        data1.boxplot(column=' ')
-        data1.boxplot(column=' ', by = ' ')
-        data1[' '].hist(bins=50)
-    else:
+    elif five == "Pool Level" :
         sys.exit()
-else: 
+    elif five == "Loan Level" :
+        sys.exit() 
+elif four == ("No"):
     sys.exit() 
+
 
