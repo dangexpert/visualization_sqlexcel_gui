@@ -4,22 +4,30 @@ import pandas as pd
 import openpyxl
 import matplotlib.pyplot as plt
 import sys
-'exec(%matplotlib inline)'
+'exec(%matplotlib inline)' #The inline backend is only available in Jupyter Notebook and the Jupyter QtConsole. (Optional) 
 
 # GUI Fields
 name = [[sg.Text('Enter server name, database, query: ')],
-         [sg.Text('Server', size=(15,1)), sg.InputCombo(['N/A','Insert Other Values Needed'])],
-          [sg.Text('Database', size=(15, 1)), sg.InputCombo(['N/A','Insert Other Values Needed'])],      
+         [sg.Text('Server', size=(15,1)), sg.InputCombo(['Insert Server Name'])],
+          [sg.Text('Database', size=(15, 1)), sg.InputCombo(['Insert Database Name'])],      
           [sg.Text('SQL Query', size=(15, 1)), sg.InputText()],  
           [sg.Text('File Name', size=(15, 1)), sg.InputText()],
-          [sg.Text('Visualize Data', size=(15,1)), sg.InputCombo(['Yes', 'No'])], #set Yes as default
-          [sg.Text('Data Type', size=(15,1)), sg.InputCombo(['N/A', 'Insert Other Values Needed'])],
+          [sg.Text('Data Visualization', size=(15, 1)), sg.InputCombo(['Yes', 'No'])], 
           [sg.Text('Graph Title', size=(15, 1)), sg.InputText()],
           [sg.Text('X-Axis', size=(15, 1)), sg.InputText()],      
-          [sg.Text('Y-Axis', size=(15, 1)), sg.InputText()],       
-          [sg.Submit(), sg.Cancel()]]
+          [sg.Text('Y-Axis', size=(15, 1)), sg.InputText()],  
+          [sg.Text('X-Label', size=(15, 1)), sg.InputText()],      
+          [sg.Text('Y-Label', size=(15, 1)), sg.InputText()],            
+          
+# Graphing GUI Fields          
+          [sg.Text('Line', size=(15, 1)), sg.InputCombo(['Yes', 'No'])],
+          [sg.Text('Histogram', size=(15, 1)), sg.InputCombo(['Yes', 'No'])],
+          [sg.Text('Box Plot', size=(15, 1)), sg.InputCombo(['Yes', 'No'])],
+          #add any other graphing methods as needed
+          
+#Title 
+form = sg.Window("SQL-Excel Converter/Visualization").Layout(name)      
 
-form = sg.Window("SQL-Excel Converter/Visualization").Layout(name)         
 button, values = form.Read()
 form.Close()
 #------------------------------------------------------------------------------------------------------------
@@ -60,29 +68,32 @@ wb.save(newFile)
 
 print("File has been created!")
 #---------------------------------------------------------------------------------------------------------
-data1 = pd.read_excel(r"C:\\Users\\insert path directory" + values[3] + ".xlsx")
+read = pd.read_excel(r"C:\\Users\\insert path directory" + values[3] + ".xlsx")
 
 four = str(values[4]) #yes or no graphing
-five = values[5] #data type
-six = values[6] #title
-seven = values[7] #x value
-eight = values[8] #y value
+five = values[5] #title
+six = values[6] #x value
+seven = values[7] #y value
+eight = values[8] 
 nine = values[9] 
-ten = values[10] 
+chart = values[10] 
+chart1= values[11] 
+chart2 = values[12] 
 
-
+# Can add more charts using https://python-graph-gallery.com/ depending on data set
 if four == 'Yes': 
-    if five == "Database": 
+    if chart == 'Yes': #line plot
         fig, ax = plt.subplots(1,1)
-        data1.plot(x = seven, y = eight, label = six, ax=ax)
-        ax.set(xlabel = nine, ylabel = ten) 
-        plt.title(six) 
+        read.plot(x = seven, y = eight, label = six, ax=ax)
+        ax.set(xlabel = six, ylabel = nine) 
+        plt.title(five) 
         plt.show
-    elif five == "Pool Level" :
+    elif  chart1 == 'Yes': #histogram
         sys.exit()
-    elif five == "Loan Level" :
-        sys.exit() 
+    elif chart2 == 'Yes': #box plot
+        read.boxplot(column = six)
+        read.boxplot(column = six, by = seven)
+        read[five].hist(bins=50)
 elif four == ("No"):
     sys.exit() 
-
 
